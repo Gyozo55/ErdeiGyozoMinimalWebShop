@@ -43,19 +43,21 @@
           $this->price = htmlspecialchars(strip_tags($this->price));
 
           // Bind data
-          $statement->bindParam(':name', $this->name);
-          $statement->bindParam(':description', $this->description);
-          $statement->bindParam(':price', $this->price);
+          if($this->name != null && $this->price != null){
+            $statement->bindParam(':name', $this->name);
+            $statement->bindParam(':description', $this->description);
+            $statement->bindParam(':price', $this->price);
 
-          // Execute query
-          if($statement->execute()) {
-            return true;
-      }
+            // Execute query
+            if($statement->execute()) {
+              return true;
+            } 
+          }
 
-      // Print error if something goes wrong
-      printf("Error: %s.\n", $statement->error);
+          // Print error if something goes wrong
+          printf("Error: %s.\n", $statement->error);
 
-      return false;
+          return false;
     }
 
     // Update Product

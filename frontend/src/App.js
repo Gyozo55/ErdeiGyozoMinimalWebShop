@@ -1,25 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import ProductList from './components/ProductList';
+import Layout from './components/Layout';
 
-function App() {
+export default function App() {
+  const [products, setProducts] = useState([]);
+  const [url, setUrl] = useState([`http://localhost/ErdeiGyozoFalatozzHw/api/product/read_all.php`]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Layout>
+        <ProductList
+          products={products}
+          setProducts={setProducts}
+          url={url}
+          setUrl={setUrl}
+        />
+      </Layout>
+    </>
   );
 }
-
-export default App;
