@@ -7,9 +7,9 @@
 * Import database in `http://localhost/phpmyadmin` from products_init.sql file.
 
 **This Api available in:**
-Windows: `http://localhost` port.
-Linux: `http://localhost:5000` port.
-Mac: `http://localhost:8080` port.
+* Windows: `http://localhost` port.
+* Linux: `http://localhost:5000` port.
+* Mac: `http://localhost:8080` port.
 
 # API route discription:
 
