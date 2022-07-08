@@ -1,16 +1,33 @@
 import React, { useState, useEffect } from "react";
 import Loader from "./Loader";
+import { FiXOctagon } from "react-icons/fi";
+
 import {
   ErrorMessage,
   Product,
   TextWrapper,
   Amount,
   AmountWrapper,
+  IconWrapper,
+  Button,
 } from "../styles/ComponentStyles";
 
 export default function ProductList({ products, setProducts, url, setUrl }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [reload, setReload] = useState(true);
+
+  function deleteProduct(id){
+    const requestOptions = {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: id
+      }),
+    };
+    fetch("http://localhost/ErdeiGyozoFalatozzHw/api/product/delete.php", requestOptions)
+      .then(setReload(true))
+  }
 
   useEffect(() => {
     setLoading(true);
@@ -35,8 +52,9 @@ export default function ProductList({ products, setProducts, url, setUrl }) {
       })
       .finally(() => {
         setLoading(false);
+        setReload(false)
       });
-  }, [url]);
+  }, [reload]);
 
   if (loading) return <Loader />;
 
@@ -49,10 +67,6 @@ export default function ProductList({ products, setProducts, url, setUrl }) {
       )}
       {!products.length && !error && (
         <h1 style={{ textAlign: "center", marginTop: "4rem" }}>
-          Yay!{" "}
-          <span role="img" aria-label="jsx-a11y/accessible-emoji">
-            🎉
-          </span>{" "}
           Jelenleg nincs elérhető termék.
         </h1>
       )}
@@ -68,7 +82,9 @@ export default function ProductList({ products, setProducts, url, setUrl }) {
                 {product.price} Ft
               </Amount>
             </AmountWrapper>
-            <i class="fa fa-trash" aria-hidden="true"></i>
+            <Button onClick={() => deleteProduct(product.id)}>
+              <FiXOctagon/>
+            </Button>
           </Product>
         ))}
     </>
