@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { InputStyles } from '../styles/InputStyles';
-import { SelectStyles } from '../styles/SelectStyles';
 import { FormStyles } from '../styles/ComponentStyles';
+import { HeaderStyles, FlexWrapper } from '../styles/ComponentStyles';
 
-export default function Form({ setUrl }) {
+export default function Form({ setReload }) {
   const [state, setState] = useState({
+    name: '',
     description: '',
-    amount: 0,
-    currency: 'USD',
+    price: 0,
   });
 
   function handleChange(e) {
     const { name, value } = e.target;
-    console.log(state)
     setState({
       ...state,
       [name]: value,
@@ -20,69 +19,70 @@ export default function Form({ setUrl }) {
   }
 
   function checkFields() {
-    if (state.description === '' && state.amount > 0) {
-      alert('Invalid Description: Please try again!')
+    if (state.name === '' || state.price <= 0) {
+      alert('Nem Megfelelő Adatok: Próbálkozzon Újra!')
+      return false
     }
-    if (state.amount === 0 && state.description !== '') {
-      alert('Invalid Amount: Please try again!')
-    }
-    if(state.amount === 0 && state.description === ''){
-      alert('Invalid Inputs: Please try again!')
-    }
+    return true
   }
 
-  function saveNewSpendingInApi() {
-    checkFields()
+
+  function createNewProduct() {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        name: state.name,
         description: state.description,
-        amount: state.amount,
-        currency: state.currency
+        price: state.price
       }),
     };
-    if(state.description !== '' && state.amount > 0){
-      fetch("/api/new-spending", requestOptions)
-      .then((response) => response.json())
-        .then(setState({
-            description: '',
-            amount: 0,
-            currency: 'USD',
-        }))
-        .then(setUrl(`http://localhost:8000/api/get-all-spendings`))
-    }
+    if(checkFields()){
+      fetch("http://localhost/ErdeiGyozoFalatozzHw/api/product/create.php", requestOptions)
+      .then((response) => {if (response.status === 200){
+        setState({
+          name: '',
+          description: '',
+          price: 0,
+        })
+        alert('Sikeres termék létrehozás!')
+        setReload(true)
+      }})
   }
-
+  }
 
 
   return (
     <>
+      <HeaderStyles>
+        <FlexWrapper>
+          <h1>Új Termék Létrehozása</h1>
+        </FlexWrapper>
+      </HeaderStyles>
       <FormStyles>
         <InputStyles
+          name='name'
+          type='text'
+          placeholder='name'
+          value={state.name}
+          onChange={handleChange}
+          />
+        <InputStyles
+          name='description'
           type='text'
           placeholder='description'
-          name='description'
           value={state.description}
           onChange={handleChange}
-        />
+          />
         <InputStyles
-          type='number'
-          placeholder='amount'
-          name='amount'
-          value={state.amount}
+          name='price'
+          type='currency'
+          placeholder='price'
+          value={state.price}
           onChange={handleChange}
-        />
-        <SelectStyles
-          name='currency'
-          value={state.currency}
-          onChange={handleChange}
-        >
-          <option value='HUF'>HUF</option>
-          <option value='USD'>USD</option>
-        </SelectStyles>
-        <InputStyles type='submit' value='Save' onClick={saveNewSpendingInApi}/>
+          />
+        <InputStyles type='submit' value='Mentés' onClick={() => createNewProduct()}/>
       </FormStyles>
-    </>
+  </>
   );
 }

@@ -15,11 +15,12 @@ import {
   FormStyles,
 } from "../styles/ComponentStyles";
 
-export default function ProductList({ products, setProducts, url}) {
+
+export default function ProductList({ products, setProducts, reload, setReload}) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [reload, setReload] = useState(true);
   const [id, setId] = useState();
+  const url = `http://localhost/ErdeiGyozoFalatozzHw/api/product/read_all.php`
 
   const [state, setState] = useState({
     name: '',
@@ -37,15 +38,11 @@ export default function ProductList({ products, setProducts, url}) {
   }
 
   function checkFields() {
-    if (state.name === '' && state.price > 0) {
-      alert('Invalid Description: Please try again!')
+    if (state.name === '' || state.price <= 0) {
+      alert('Nem Megfelelő Adatok: Próbálkozzon Újra!')
+      return false
     }
-    if (state.price === 0 && state.name !== '') {
-      alert('Invalid Amount: Please try again!')
-    }
-    if(state.price === 0 && state.name === ''){
-      alert('Invalid Inputs: Please try again!')
-    }
+    return true
   }
 
 
@@ -61,15 +58,18 @@ export default function ProductList({ products, setProducts, url}) {
         price: state.price
       }),
     };
-    
+
     fetch("http://localhost/ErdeiGyozoFalatozzHw/api/product/update.php", requestOptions)
     .then((response) => response.json())
-      .then(setState({
+    .then((response) => {if (response.status === 200){
+      setState({
         name: '',
         description: '',
         price: 0,
-      }))
-      .then(setReload(true))
+      })
+      alert('Sikeres termék módosítás!')
+      setReload(true)
+    }})
   }
 
   function deleteProduct(id){
@@ -117,7 +117,7 @@ export default function ProductList({ products, setProducts, url}) {
     <>
       {error && (
         <ErrorMessage>
-          The server is probably down. Please try again later.
+          A szerver jelenleg nem elérhető, próbálkozzon később!
         </ErrorMessage>
       )}
       {!products.length && !error && (
@@ -129,7 +129,6 @@ export default function ProductList({ products, setProducts, url}) {
         products.map((product) => (
           <Product key={product.id}>
             <TextWrapper>
-
               <h3>{product.name}</h3>
               <p>{product.description}</p>
             </TextWrapper>
