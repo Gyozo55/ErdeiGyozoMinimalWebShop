@@ -1,21 +1,76 @@
 import React, { useState, useEffect } from "react";
 import Loader from "./Loader";
-import { FiXOctagon } from "react-icons/fi";
-
+import { FiXOctagon, FiPlus, FiCheck } from "react-icons/fi";
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import { InputStyles } from '../styles/InputStyles';
 import {
   ErrorMessage,
   Product,
   TextWrapper,
   Amount,
   AmountWrapper,
-  IconWrapper,
-  Button,
+  DeleteButton,
+  UpdateButton,
+  FormStyles,
 } from "../styles/ComponentStyles";
 
-export default function ProductList({ products, setProducts, url, setUrl }) {
+export default function ProductList({ products, setProducts, url}) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [reload, setReload] = useState(true);
+  const [id, setId] = useState();
+
+  const [state, setState] = useState({
+    name: '',
+    description: '',
+    price: 0,
+  });
+
+  function handleChange(e) {
+    setId(e.target.id)
+    const { name, value } = e.target;
+    setState({
+      ...state,
+      [name]: value,
+    });
+  }
+
+  function checkFields() {
+    if (state.name === '' && state.price > 0) {
+      alert('Invalid Description: Please try again!')
+    }
+    if (state.price === 0 && state.name !== '') {
+      alert('Invalid Amount: Please try again!')
+    }
+    if(state.price === 0 && state.name === ''){
+      alert('Invalid Inputs: Please try again!')
+    }
+  }
+
+
+  function updateProduct() {
+    checkFields()
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: id,
+        name: state.name,
+        description: state.description,
+        price: state.price
+      }),
+    };
+    
+    fetch("http://localhost/ErdeiGyozoFalatozzHw/api/product/update.php", requestOptions)
+    .then((response) => response.json())
+      .then(setState({
+        name: '',
+        description: '',
+        price: 0,
+      }))
+      .then(setReload(true))
+  }
 
   function deleteProduct(id){
     const requestOptions = {
@@ -74,6 +129,7 @@ export default function ProductList({ products, setProducts, url, setUrl }) {
         products.map((product) => (
           <Product key={product.id}>
             <TextWrapper>
+
               <h3>{product.name}</h3>
               <p>{product.description}</p>
             </TextWrapper>
@@ -82,9 +138,43 @@ export default function ProductList({ products, setProducts, url, setUrl }) {
                 {product.price} Ft
               </Amount>
             </AmountWrapper>
-            <Button onClick={() => deleteProduct(product.id)}>
+            <Popup trigger={<UpdateButton><FiPlus/></UpdateButton>} position="right center">
+              <FormStyles>
+                <InputStyles
+                  id={product.id}
+                  name='name'
+                  type='text'
+                  placeholder={product.name}
+                  value={state.name}
+                  onChange={handleChange}
+                  />
+                <InputStyles
+                  id={product.id}
+                  name='description'
+                  type='text'
+                  placeholder={product.description}
+                  value={state.description}
+                  onChange={handleChange}
+                  />
+                <InputStyles
+                  id={product.id}
+                  name='price'
+                  type='currency'
+                  placeholder={product.price}
+                  value={state.price}
+                  onChange={handleChange}
+                  />
+              </FormStyles>
+              <UpdateButton onClick={() => updateProduct()}>
+                <FiCheck/>
+              </UpdateButton>
+              <DeleteButton onClick={() => setReload(true)}>
+                <FiXOctagon/>
+              </DeleteButton>
+            </Popup>
+            <DeleteButton onClick={() => deleteProduct(product.id)}>
               <FiXOctagon/>
-            </Button>
+            </DeleteButton>
           </Product>
         ))}
     </>

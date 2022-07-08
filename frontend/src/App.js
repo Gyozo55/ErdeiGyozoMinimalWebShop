@@ -13,7 +13,6 @@ export default function App() {
           products={products}
           setProducts={setProducts}
           url={url}
-          setUrl={setUrl}
         />
       </Layout>
     </>
