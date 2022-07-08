@@ -58,18 +58,18 @@ export default function ProductList({ products, setProducts, reload, setReload})
         price: state.price
       }),
     };
-
-    fetch("http://localhost/ErdeiGyozoFalatozzHw/api/product/update.php", requestOptions)
-    .then((response) => response.json())
-    .then((response) => {if (response.status === 200){
-      setState({
-        name: '',
-        description: '',
-        price: 0,
-      })
-      alert('Sikeres termék módosítás!')
-      setReload(true)
-    }})
+    if(checkFields()){
+      fetch("http://localhost/ErdeiGyozoFalatozzHw/api/product/update.php", requestOptions)
+      .then((response) => {if (response.status === 200){
+        setState({
+          name: '',
+          description: '',
+          price: 0,
+        })
+        alert('Sikeres termék módosítás!')
+        setReload(true)
+      }})
+  }
   }
 
   function deleteProduct(id){
