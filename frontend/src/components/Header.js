@@ -7,7 +7,7 @@ export default function Header() {
     <>
       <HeaderStyles>
         <FlexWrapper>
-          <h1>Products</h1>
+          <h1>Termékek</h1>
         </FlexWrapper>
       </HeaderStyles>
     </>

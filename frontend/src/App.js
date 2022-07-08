@@ -1,19 +1,28 @@
 import React, { useState } from 'react';
 import ProductList from './components/ProductList';
 import Layout from './components/Layout';
+import Form from './components/Form';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import { UpdateButton } from "./styles/ComponentStyles";
 
 export default function App() {
   const [products, setProducts] = useState([]);
-  const [url, setUrl] = useState([`http://localhost/ErdeiGyozoFalatozzHw/api/product/read_all.php`]);
+  const [reload, setReload] = useState(true);
 
   return (
     <>
       <Layout>
+        <Popup trigger={<UpdateButton>Új Termék Létrehozása</UpdateButton>} position="right center">
+          <Form
+            setReload={setReload}
+          />
+        </Popup>
         <ProductList
           products={products}
           setProducts={setProducts}
-          url={url}
-          setUrl={setUrl}
+          reload={reload}
+          setReload={setReload}
         />
       </Layout>
     </>

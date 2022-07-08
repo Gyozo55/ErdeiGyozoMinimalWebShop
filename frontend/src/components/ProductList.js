@@ -1,16 +1,88 @@
 import React, { useState, useEffect } from "react";
 import Loader from "./Loader";
+import { FiXOctagon, FiPlus, FiCheck } from "react-icons/fi";
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import { InputStyles } from '../styles/InputStyles';
 import {
   ErrorMessage,
   Product,
   TextWrapper,
   Amount,
   AmountWrapper,
+  DeleteButton,
+  UpdateButton,
+  FormStyles,
 } from "../styles/ComponentStyles";
 
-export default function ProductList({ products, setProducts, url, setUrl }) {
+
+export default function ProductList({ products, setProducts, reload, setReload}) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [id, setId] = useState();
+  const url = `http://localhost/ErdeiGyozoFalatozzHw/api/product/read_all.php`
+
+  const [state, setState] = useState({
+    name: '',
+    description: '',
+    price: 0,
+  });
+
+  function handleChange(e) {
+    setId(e.target.id)
+    const { name, value } = e.target;
+    setState({
+      ...state,
+      [name]: value,
+    });
+  }
+
+  function checkFields() {
+    if (state.name === '' || state.price <= 0) {
+      alert('Nem Megfelelő Adatok: Próbálkozzon Újra!')
+      return false
+    }
+    return true
+  }
+
+
+  function updateProduct() {
+    checkFields()
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: id,
+        name: state.name,
+        description: state.description,
+        price: state.price
+      }),
+    };
+
+    fetch("http://localhost/ErdeiGyozoFalatozzHw/api/product/update.php", requestOptions)
+    .then((response) => response.json())
+    .then((response) => {if (response.status === 200){
+      setState({
+        name: '',
+        description: '',
+        price: 0,
+      })
+      alert('Sikeres termék módosítás!')
+      setReload(true)
+    }})
+  }
+
+  function deleteProduct(id){
+    const requestOptions = {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: id
+      }),
+    };
+    fetch("http://localhost/ErdeiGyozoFalatozzHw/api/product/delete.php", requestOptions)
+      .then(setReload(true))
+  }
 
   useEffect(() => {
     setLoading(true);
@@ -35,8 +107,9 @@ export default function ProductList({ products, setProducts, url, setUrl }) {
       })
       .finally(() => {
         setLoading(false);
+        setReload(false)
       });
-  }, [url]);
+  }, [reload]);
 
   if (loading) return <Loader />;
 
@@ -44,15 +117,11 @@ export default function ProductList({ products, setProducts, url, setUrl }) {
     <>
       {error && (
         <ErrorMessage>
-          The server is probably down. Please try again later.
+          A szerver jelenleg nem elérhető, próbálkozzon később!
         </ErrorMessage>
       )}
       {!products.length && !error && (
         <h1 style={{ textAlign: "center", marginTop: "4rem" }}>
-          Yay!{" "}
-          <span role="img" aria-label="jsx-a11y/accessible-emoji">
-            🎉
-          </span>{" "}
           Jelenleg nincs elérhető termék.
         </h1>
       )}
@@ -68,7 +137,43 @@ export default function ProductList({ products, setProducts, url, setUrl }) {
                 {product.price} Ft
               </Amount>
             </AmountWrapper>
-            <i class="fa fa-trash" aria-hidden="true"></i>
+            <Popup trigger={<UpdateButton><FiPlus/></UpdateButton>} position="right center">
+              <FormStyles>
+                <InputStyles
+                  id={product.id}
+                  name='name'
+                  type='text'
+                  placeholder={product.name}
+                  value={state.name}
+                  onChange={handleChange}
+                  />
+                <InputStyles
+                  id={product.id}
+                  name='description'
+                  type='text'
+                  placeholder={product.description}
+                  value={state.description}
+                  onChange={handleChange}
+                  />
+                <InputStyles
+                  id={product.id}
+                  name='price'
+                  type='currency'
+                  placeholder={product.price}
+                  value={state.price}
+                  onChange={handleChange}
+                  />
+              </FormStyles>
+              <UpdateButton onClick={() => updateProduct()}>
+                <FiCheck/>
+              </UpdateButton>
+              <DeleteButton onClick={() => setReload(true)}>
+                <FiXOctagon/>
+              </DeleteButton>
+            </Popup>
+            <DeleteButton onClick={() => deleteProduct(product.id)}>
+              <FiXOctagon/>
+            </DeleteButton>
           </Product>
         ))}
     </>
