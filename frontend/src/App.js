@@ -13,7 +13,7 @@ export default function App() {
   return (
     <>
       <Layout>
-        <Popup trigger={<UpdateButton>Új Termék Létrehozása</UpdateButton>} position="right center">
+        <Popup contentStyle={{width: "400px", height: "390px"}} trigger={<UpdateButton>Új Termék Létrehozása</UpdateButton>} position="right center">
           <Form
             setReload={setReload}
           />

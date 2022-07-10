@@ -3,8 +3,9 @@
 # How we can use this Api?
 
 * Install XAMPP : `https://www.apachefriends.org/hu/index.html`
+* Copy this repository folder to `..\xampp\htdocs`
 * Run XAMPP and Switch ON apache and mysql.
-* Import database in `http://localhost/phpmyadmin` from products_init.sql file.
+* Import database content in `http://localhost/phpmyadmin` from products_init.sql file.
 
 **This Api available in:**
 Windows: `http://localhost` port.
