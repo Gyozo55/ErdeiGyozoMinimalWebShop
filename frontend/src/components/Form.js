@@ -56,28 +56,28 @@ export default function Form({ setReload }) {
     <>
       <HeaderStyles>
         <FlexWrapper>
-          <h1>Új Termék Létrehozása</h1>
+          <h2>Új Termék Létrehozása:</h2>
         </FlexWrapper>
       </HeaderStyles>
       <FormStyles>
         <InputStyles
           name='name'
           type='text'
-          placeholder='name'
+          placeholder='Név'
           value={state.name}
           onChange={handleChange}
           />
         <InputStyles
           name='description'
           type='text'
-          placeholder='description'
+          placeholder='Leírás'
           value={state.description}
           onChange={handleChange}
           />
         <InputStyles
           name='price'
-          type='currency'
-          placeholder='price'
+          type='number'
+          placeholder='Ár'
           value={state.price}
           onChange={handleChange}
           />

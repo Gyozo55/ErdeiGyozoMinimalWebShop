@@ -21,7 +21,7 @@ export const InputStyles = styled.input`
   }
 
   &[type='number'] {
-    width: 150px;
+    width: 500px;
   }
 
   &[type='submit'] {
@@ -29,6 +29,7 @@ export const InputStyles = styled.input`
     color: var(--color-white);
     cursor: pointer;
     transition: all 0.3s;
+    position: center
 
     &:hover {
       transform: translateY(-2px);

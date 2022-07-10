@@ -137,7 +137,10 @@ export default function ProductList({ products, setProducts, reload, setReload})
                 {product.price} Ft
               </Amount>
             </AmountWrapper>
-            <Popup trigger={<UpdateButton><FiPlus/></UpdateButton>} position="right center">
+            <Popup contentStyle={{width: "300px", height: "300px"}} trigger={<UpdateButton><FiPlus/></UpdateButton>} position="right center">
+              <TextWrapper>
+                <h3>Termék Módosítása:</h3>
+              </TextWrapper>
               <FormStyles>
                 <InputStyles
                   id={product.id}
@@ -158,18 +161,18 @@ export default function ProductList({ products, setProducts, reload, setReload})
                 <InputStyles
                   id={product.id}
                   name='price'
-                  type='currency'
+                  type='number'
                   placeholder={product.price}
                   value={state.price}
                   onChange={handleChange}
                   />
-              </FormStyles>
               <UpdateButton onClick={() => updateProduct()}>
                 <FiCheck/>
               </UpdateButton>
               <DeleteButton onClick={() => setReload(true)}>
                 <FiXOctagon/>
               </DeleteButton>
+              </FormStyles>
             </Popup>
             <DeleteButton onClick={() => deleteProduct(product.id)}>
               <FiXOctagon/>
