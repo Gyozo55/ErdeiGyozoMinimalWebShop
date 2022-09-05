@@ -85,7 +85,7 @@ This route only allow `DELETE` http method.
 
   
 
-### Run the JS/React Frontend
+# Run the JS/React Frontend
 
 This project is best run using **Node 14.17.x**.
 
