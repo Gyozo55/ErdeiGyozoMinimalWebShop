@@ -1,4 +1,4 @@
-# ErdeiGyozoFalatozzHw
+# ErdeiGyozoMinimalWebShop
 
 # How we can use this Api?
 
@@ -14,7 +14,7 @@
 
 # API route discription:
 
-## POST http://localhost/ErdeiGyozoFalatozzHw/api/product/create.php:
+## POST http://localhost/ErdeiGyozoMinimalWebShop/api/product/create.php:
     
 This route what we use, when we want create product.
 This route only allow `POST` http method.
@@ -33,7 +33,7 @@ This route only allow `POST` http method.
   * `400` if request parameter is missing or incorrect
   * `500` server error 
 
-## GET http://localhost/ErdeiGyozoFalatozzHw/api/product/read_all.php:
+## GET http://localhost/ErdeiGyozoMinimalWebShop/api/product/read_all.php:
     
 This route what we use, when we want to see all product.
 This route only allow `GET` http method.
@@ -46,7 +46,7 @@ This route only allow `GET` http method.
   * `400` if request parameter is missing or incorrect
   * `500` server error 
 
-## PUT http://localhost/ErdeiGyozoFalatozzHw/api/product/update.php:
+## PUT http://localhost/ErdeiGyozoMinimalWebShop/api/product/update.php:
     
 This route what we use, when we want to update one specific product. 
 This route only allow `PUT` http method.
@@ -66,7 +66,7 @@ This route only allow `PUT` http method.
   * `400` if request parameter is missing or incorrect
   * `500` server error 
 
-## DELETE http://localhost/ErdeiGyozoFalatozzHw/api/product/delete.php:
+## DELETE http://localhost/ErdeiGyozoMinimalWebShop/api/product/delete.php:
     
 This route what we use, when we want to delete one specific product. 
 This route only allow `DELETE` http method.
