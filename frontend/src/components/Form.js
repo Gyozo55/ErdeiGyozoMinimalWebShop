@@ -38,7 +38,7 @@ export default function Form({ setReload }) {
       }),
     };
     if(checkFields()){
-      fetch("http://localhost/ErdeiGyozoFalatozzHw/api/product/create.php", requestOptions)
+      fetch("http://localhost/ErdeiGyozoMinimalWebShop/api/product/create.php", requestOptions)
       .then((response) => {if (response.status === 200){
         setState({
           name: '',

@@ -20,7 +20,7 @@ export default function ProductList({ products, setProducts, reload, setReload})
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [id, setId] = useState();
-  const url = `http://localhost/ErdeiGyozoFalatozzHw/api/product/read_all.php`
+  const url = `http://localhost/ErdeiGyozoMinimalWebShop/api/product/read_all.php`
 
   const [state, setState] = useState({
     name: '',
@@ -59,7 +59,7 @@ export default function ProductList({ products, setProducts, reload, setReload})
       }),
     };
     if(checkFields()){
-      fetch("http://localhost/ErdeiGyozoFalatozzHw/api/product/update.php", requestOptions)
+      fetch("http://localhost/ErdeiGyozoMinimalWebShop/api/product/update.php", requestOptions)
       .then((response) => {if (response.status === 200){
         setState({
           name: '',
@@ -80,7 +80,7 @@ export default function ProductList({ products, setProducts, reload, setReload})
         id: id
       }),
     };
-    fetch("http://localhost/ErdeiGyozoFalatozzHw/api/product/delete.php", requestOptions)
+    fetch("http://localhost/ErdeiGyozoMinimalWebShop/api/product/delete.php", requestOptions)
       .then(setReload(true))
   }
 
